@@ -5,8 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
 
-var port = 8080;
-var config = require('./utils/config')(port);
+//load the config file(s)
+var serverConfig = require('config');
+
+var config = require('./utils/config')(serverConfig);
 
 var sessionmgmt = require('./utils/sessionmgmt');
 var indexRouter = require('./routes/index');
@@ -15,8 +17,6 @@ var logoutRouter = require('./routes/logout');
 var playerRouter = require('./routes/player');
 
 var app = express();
-
-var cookieSecret = 'keyboard cat';
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,13 +29,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 var sess = {
-    secret: cookieSecret,
+    secret: config.cookieSecret,
     resave: false,
     saveUninitialized: true,
     cookie: {}
 };
 //use secure cookies in production but not for dev
-if (app.get('env') === 'production') {
+if (config.isProduction) {
+    console.log('Using production cookies');
     //required if we're behind a reverse proxy for cookies
     app.set('trust proxy', 1);
     sess.cookie.secure = true;
@@ -56,7 +57,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+    res.locals.error = !config.isProduction ? err : {};
 
     // render the error page
     res.status(err.status || 500);
@@ -66,5 +67,5 @@ app.use(function(err, req, res, next) {
 module.exports = app;
 
 app.listen(config.port, () => {
-    console.log(`Example app listening on port ${port}`);
+    console.log(`Example app listening on port ${config.port}`);
 });
