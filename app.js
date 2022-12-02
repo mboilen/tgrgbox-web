@@ -15,6 +15,7 @@ var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var logoutRouter = require('./routes/logout');
 var playerRouter = require('./routes/player')(config);
+var streamkeysRouter = require('./routes/streamkeys')(config);
 
 var app = express();
 
@@ -53,6 +54,7 @@ app.get('/', sessionmgmt.isAuthenticated, indexRouter);
 app.use('/player', sessionmgmt.isAuthenticated, playerRouter);
 app.use('/login', loginRouter);
 app.use('/logout', logoutRouter);
+app.use('/streamkeys', sessionmgmt.isAuthenticated, streamkeysRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

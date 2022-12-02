@@ -4,6 +4,7 @@ module.exports = function(config) {
     var module = {};
     module.port = config.get('port');
     module.cookieSecret = config.get('cookieSecret');
+    module.siteName = config.get('siteName');
     if (config.has('development'))
         module.isProduction = !config.get('development');
     else

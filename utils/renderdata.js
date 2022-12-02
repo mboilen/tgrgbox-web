@@ -11,7 +11,7 @@ module.exports = function(config) {
         return new URL(path, url).href;
     }
 
-    function buildDataForStream(username, streamName) {
+    function buildDataForStream(username, streamName = config.channels[0].name) {
         //make a map of sources from the config
         var sources = new Map(config.channels.map( (channel) => {
             var sources = Array.from(config.urls.values()).map( (url) => ({ 'label': url.name,
@@ -20,7 +20,8 @@ module.exports = function(config) {
             return [ channel.name, {
                 'key': channel.name,
                 'title': channel.title,
-                'sources': sources
+                'sources': sources,
+                'streamKey': channel.streamKey
             } ];
         }));
 
@@ -32,10 +33,11 @@ module.exports = function(config) {
 
         var data = { 'renderData' : {
             'username': username,
+            'siteName': config.siteName,
             'defaultChannelTitle': sources.get(config.channels[0].name).title,
             'source': source,
-            'channels' : config.channels.map( (channel) => ({'name': channel.name, 'title': channel.title}) ),
-            'hasStreamKeys' : config.streamers.has(username)
+            'channels' : config.channels.map( (channel) => ({'name': channel.name, 'title': channel.title, 'streamKey': channel.streamKey}) ),
+            'streamers' : config.streamers,
         } };
         debug('player.js data is %O', data);
         return data;

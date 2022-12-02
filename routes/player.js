@@ -9,9 +9,9 @@ module.exports = function(config) {
 
     /* GET player. */
     router.get('/', function(req, res, next) {
-        var data = renderData(req.session.user, config.channels[0].name);
+        var data = renderData(req.session.user);
         debug('player.js data is %O', data);
-        res.render('player', { 'data': data });
+        res.render('player', data);
     });
     router.get('/:stream', function(req, res, next) {
         debug("Got stream name %O", req.params);

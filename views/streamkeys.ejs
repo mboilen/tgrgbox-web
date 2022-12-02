@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= renderData.source.title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  </head>
+    <%- include('navbar', renderData); %>
+    <div class="p-3 m-3">
+    <h1><center>Stream keys for <%= renderData.siteName %></center></h1>
+    </div>
+    <% var userChannels = renderData.streamers.get(renderData.username);
+       if (userChannels) { 
+         var userChannelsSet = new Set(userChannels);%>
+         <table class="table table-striped table-hover table-bordered">
+           <thead>
+             <tr>
+               <th scope="col">Channel</th>
+               <th width="70%" scope="col">Stream Key</th>
+             </tr>
+           </thead>
+           <tbody>
+         <%renderData.channels.forEach(function(channel) {
+           if (userChannelsSet.has(channel.name)) { %>
+             <tr>
+               <td><%= channel.title %></td>
+               <td><%= channel.streamKey %></td>
+             </tr>
+        <% }
+        });%>
+           </tbody>
+       <%} else { %>
+       <p>You have no stream keys</p>
+       <% } %>
+
+  <body>
+    <script src="/public/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  </body>
+</html>
+

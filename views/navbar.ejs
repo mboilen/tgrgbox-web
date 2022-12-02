@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/player"><%= defaultChannelTitle %></a>
+    <a class="navbar-brand" href="/player"><%= siteName %></a>
     <div class="d-flex justify-content-right">
 
 
@@ -24,7 +24,7 @@
           <%= username %>
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
-          <% if (renderData.hasStreamKeys) { %>
+          <% if (renderData.streamers.has(username)) { %>
             <li><a class="dropdown-item" href="/streamkeys">Your stream keys</a></li>
             <li><a class="dropdown-divider"></li>
           <%}%>
