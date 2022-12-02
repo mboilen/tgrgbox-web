@@ -1,11 +1,36 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/public/ovenplayer/ovenplayer.js"></script>
+    <script src="/public/hls.js/hls.min.js"></script>
+    <style>
+      .wrapper{
+        max-width: 900px;
+        margin: 0 auto;
+      }
+    </style>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <h1><center><%= title %></center></h1>
+    <div id="player"></div>
+    <script>
+      function component() {
+        var player = OvenPlayer.create("player", {
+          "autoStart": false,
+          "autoFallback": true,
+          "mute": false,
+          "hlsConfig": {
+            "liveSyncDuration": 0.5,
+            "liveMaxLatencyDuration": 2,
+            "maxLiveSyncPlaybackRate": 1.5
+          },
+          "sources": <%- JSON.stringify(sources.get(defaultSource).sources) %>
+        });
+      }
+      component();
+    </script>
   </body>
 </html>

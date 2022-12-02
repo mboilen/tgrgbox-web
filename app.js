@@ -14,7 +14,7 @@ var sessionmgmt = require('./utils/sessionmgmt');
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var logoutRouter = require('./routes/logout');
-var playerRouter = require('./routes/player');
+var playerRouter = require('./routes/player')(config);
 
 var app = express();
 
@@ -27,6 +27,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//serve the ovenplayer files
+app.use('/public/ovenplayer', express.static(path.join(__dirname, 'node_modules', 'ovenplayer', 'dist')));
+app.use('/public/hls.js', express.static(path.join(__dirname, 'node_modules', 'hls.js', 'dist')));
 
 var sess = {
     secret: config.cookieSecret,
