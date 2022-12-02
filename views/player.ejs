@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><%= data.source.title %></title>
+    <title><%= renderData.source.title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="/public/ovenplayer/ovenplayer.js"></script>
     <script src="/public/hls.js/hls.min.js"></script>
@@ -20,8 +20,8 @@
   </head>
   <body>
 
-    <%- include('navbar', data); %>
-    <h1><center><%= data.source.title %></center></h1>
+    <%- include('navbar', renderData); %>
+    <h1><center><%= renderData.source.title %></center></h1>
 
     <div class="wrapper">
       <div id="player"></div>
@@ -37,7 +37,7 @@
             "liveMaxLatencyDuration": 2,
             "maxLiveSyncPlaybackRate": 1.5
           },
-          "sources": <%- JSON.stringify(data.source) %>
+          "sources": <%- JSON.stringify(renderData.source) %>
         });
       }
       component();
