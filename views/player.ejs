@@ -16,17 +16,51 @@
     </style>
   </head>
   <body>
+    <nav class="navbar navbar-expand-lg ">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/player"><%= defaultChannelTitle %></a>
+        <div class="d-flex justify-content-right">
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="channelDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Channels
+                </a>
+                <ul class="dropdown-menu">
+                  <% channels.forEach( (channel) => { %>
+                  <li><a class="dropdown-item" href="/player/<%= channel.name %>"><%= channel.title %></a></li>
+                  <% }) %>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="userDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <%= username %>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- todo add link to stream keys (if any) -->
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
     <h1><center><%= source.title %></center></h1>
-    <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <%=username%>
-      </button>
-      <ul class="dropdown-menu">
-        <!-- todo add link to stream keys (if any) -->
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="/logout">Logout</a></li>
-      </ul>
-    </div>
 
     <div id="player"></div>
     <script src="/public/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

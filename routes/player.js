@@ -29,7 +29,9 @@ module.exports = function(config) {
     function buildDataForStream(username, streamName) {
         var data = {
             'username': username,
+            'defaultChannelTitle': sources.get(config.channels[0].name).title,
             'source': sources.get(streamName),
+            'channels' : config.channels.map( (channel) => ({'name': channel.name, 'title': channel.title}) )
         };
         debug('player.js data is %O', data);
         return data;
