@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><%= source.title %></title>
+    <title><%= data.source.title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="/public/ovenplayer/ovenplayer.js"></script>
     <script src="/public/hls.js/hls.min.js"></script>
@@ -20,43 +20,8 @@
   </head>
   <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/player"><%= defaultChannelTitle %></a>
-        <div class="d-flex justify-content-right">
-
-
-
-          <!--Channel dropdown -->
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              Channels
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <% channels.forEach( (channel) => { %>
-              <li><a class="dropdown-item" href="/player/<%= channel.name %>"><%= channel.title %></a></li>
-              <% }) %>
-            </ul>
-          </div>
-          <!-- End channel dropdown -->
-
-          <!--User dropdown -->
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              <%= username %>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/logout">Logout</a></li>
-            </ul>
-          </div>
-          <!-- End channel dropdown -->
-        </div>
-      </div>
-    </nav>
-
-    <h1><center><%= source.title %></center></h1>
+    <%- include('navbar', data); %>
+    <h1><center><%= data.source.title %></center></h1>
 
     <div class="wrapper">
       <div id="player"></div>
@@ -72,7 +37,7 @@
             "liveMaxLatencyDuration": 2,
             "maxLiveSyncPlaybackRate": 1.5
           },
-          "sources": <%- JSON.stringify(source) %>
+          "sources": <%- JSON.stringify(data.source) %>
         });
       }
       component();

@@ -27,12 +27,12 @@ module.exports = function(config) {
     }));
 
     function buildDataForStream(username, streamName) {
-        var data = {
+        var data = { 'data' : {
             'username': username,
             'defaultChannelTitle': sources.get(config.channels[0].name).title,
             'source': sources.get(streamName),
             'channels' : config.channels.map( (channel) => ({'name': channel.name, 'title': channel.title}) )
-        };
+        } };
         debug('player.js data is %O', data);
         return data;
     }
@@ -41,7 +41,7 @@ module.exports = function(config) {
     router.get('/', function(req, res, next) {
         var data = buildDataForStream(req.session.user, config.channels[0].name);
         debug('player.js data is %O', data);
-        res.render('player', data);
+        res.render('player', { 'data': data });
     });
     router.get('/:stream', function(req, res, next) {
         debug("Got stream name %O", req.params);
