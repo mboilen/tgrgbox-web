@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= source.title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="/public/ovenplayer/ovenplayer.js"></script>
     <script src="/public/hls.js/hls.min.js"></script>
+    <link href="/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <style>
       .wrapper{
         max-width: 900px;
@@ -14,8 +16,20 @@
     </style>
   </head>
   <body>
-    <h1><center><%= title %></center></h1>
+    <h1><center><%= source.title %></center></h1>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <%=username%>
+      </button>
+      <ul class="dropdown-menu">
+        <!-- todo add link to stream keys (if any) -->
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+      </ul>
+    </div>
+
     <div id="player"></div>
+    <script src="/public/bootstrap/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script>
       function component() {
         var player = OvenPlayer.create("player", {
@@ -27,7 +41,7 @@
             "liveMaxLatencyDuration": 2,
             "maxLiveSyncPlaybackRate": 1.5
           },
-          "sources": <%- JSON.stringify(sources.get(defaultSource).sources) %>
+          "sources": <%- JSON.stringify(source) %>
         });
       }
       component();

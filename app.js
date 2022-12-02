@@ -31,6 +31,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //serve the ovenplayer files
 app.use('/public/ovenplayer', express.static(path.join(__dirname, 'node_modules', 'ovenplayer', 'dist')));
 app.use('/public/hls.js', express.static(path.join(__dirname, 'node_modules', 'hls.js', 'dist')));
+//and bootstrap
+app.use('/public/bootstrap', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
 
 var sess = {
     secret: config.cookieSecret,

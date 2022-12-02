@@ -26,14 +26,30 @@ module.exports = function(config) {
         } ];
     }));
 
-    var data = {
-            title: sources.get(config.channels[0].name).title,
-            'sources': sources,
-            'defaultSource': config.channels[0].name
-    };
-    debug('player.js data is %O', data);
+    function buildDataForStream(username, streamName) {
+        var data = {
+            'username': username,
+            'source': sources.get(streamName),
+        };
+        debug('player.js data is %O', data);
+        return data;
+    }
+
     /* GET player. */
     router.get('/', function(req, res, next) {
+        var data = buildDataForStream(req.session.user, config.channels[0].name);
+        debug('player.js data is %O', data);
+        res.render('player', data);
+    });
+    router.get('/:stream', function(req, res, next) {
+        debug("Got stream name %O", req.params);
+        var streamSource = sources.get(req.params.stream);
+        if (!streamSource) {
+            req.status(404).send("Cannot find stream " + req.params.stream);
+            return;
+        }
+        var data = buildDataForStream(req.session.user, req.params.stream);
+        debug('player.js data is %O', data);
         res.render('player', data);
     });
     return router;
