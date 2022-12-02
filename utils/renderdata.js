@@ -34,7 +34,8 @@ module.exports = function(config) {
             'username': username,
             'defaultChannelTitle': sources.get(config.channels[0].name).title,
             'source': source,
-            'channels' : config.channels.map( (channel) => ({'name': channel.name, 'title': channel.title}) )
+            'channels' : config.channels.map( (channel) => ({'name': channel.name, 'title': channel.title}) ),
+            'hasStreamKeys' : config.streamers.has(username)
         } };
         debug('player.js data is %O', data);
         return data;

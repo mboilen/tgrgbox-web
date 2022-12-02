@@ -24,8 +24,10 @@
           <%= username %>
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><a class="dropdown-divider"></li>
+          <% if (renderData.hasStreamKeys) { %>
+            <li><a class="dropdown-item" href="/streamkeys">Your stream keys</a></li>
+            <li><a class="dropdown-divider"></li>
+          <%}%>
           <li><a class="dropdown-item" href="/logout">Logout</a></li>
         </ul>
       </div>
