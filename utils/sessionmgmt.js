@@ -16,7 +16,7 @@ function createUser(profile) {
         //in Discord the username does not have the discriminator.
         user: profile.displayName,
         userid: profile.username,
-        photoUrl: profile.photos.find( (photo) => photo.primary).value
+        photoUrl: profile.photos.find( (photo) => photo.primary)?.value
     };
 }
 function copyUserToSession(session, user) {

@@ -1,5 +1,6 @@
 var debug = require('debug')('tgrgbox:login')
 var express = require('express');
+const res = require('express/lib/response');
 var router = express.Router();
 var passport = require('passport');
 var DiscordStrategy = require('@oauth-everything/passport-discord').Strategy;
@@ -17,13 +18,19 @@ module.exports = function(app, sessionmgmt, config) {
             'prompt': prompt
         },
         function (accessToken, refreshToken, profile, cb) {
-            //displayName contains the discriminator
-            if (config.users.has(profile.displayName)) {
-                debug('found user: %O', profile.username);
-                cb(null, profile);
+            debug("cb accessToken: %O", accessToken);
+            debug("cb refreshToken: %O", refreshToken);
+            debug("cb cb: %O", cb);
+            if (profile && profile.displayName) {
+                if (config.users.has(profile.displayName)) {
+                    debug('found user: %O', profile.username);
+                    cb(null, profile);
+                } else {
+                    debug('unauthorized user: %O', profile.displayName);
+                    cb(null, profile);
+                }
             } else {
-                debug('unauthorized user: %O', profile.displayName);
-                cb(null, false);
+                cb('No profile found');
             }
         }
     ));
@@ -46,43 +53,34 @@ module.exports = function(app, sessionmgmt, config) {
             res.redirect('/');
         } else {
             debug('calling discord oauth');
-            passport.authenticate('discord')(req, res, next);
+            passport.authenticate('discord', function(err, user, info) {
+                debug('err: %O', err);
+                debug('user: %O', user);
+                debug('info: %O', info);
+                req.login(user, next);
+            })(req, res, next);
         }
     },
     );
-    router.get('/_oauth', passport.authenticate('discord', {failureRedirect: '/login/error'}),
+    router.get('/_oauth', passport.authenticate('discord', { failureRedirect: '/login/error', failureMessage: true}),
         function(req, res) {
-            debug('redirecting to /info');
             res.redirect('/login/info');
         }
     );
-        /*
-        req.session.regenerate(function (err) {
-            debug('in regenerate');
-            if (err) next(err);
-            debug('setting user');
-            req.session.user = 'testuser';
-            debug('saving');
-            req.session.save(function (err) {
-                debug('in save');
-                if (err) return next(err);
-                debug('redirecting, param is ' + req.query.redirect);
-                if (req.query.redirect) {
-                    res.redirect(req.query.redirect);
-                } else {
-                    res.redirect('/');
-                }
-            });
-            debug('save over');
-        });
-        */
+
     router.get('/info', function(req, res, next) {
         if (!req.isAuthenticated()) {
             debug('unauthenticated user in /info');
+            req.session.destroy();
             res.redirect('/login/error');
         }
-        debug('got auth %O', req.user);
-        debug('got auth %O', req.session);
+        if (!config.users.has(req.user.user)) {
+            //This user has a discord account but isn't authorized for the service.
+            var user = req.user.user;
+            req.session.destroy();
+            res.render('unauthorized', {'username': user});
+            return;
+        }
         req.session.regenerate(function (err) {
             debug('in regenerate');
             if (err) next(err);
@@ -104,7 +102,8 @@ module.exports = function(app, sessionmgmt, config) {
         });
     });
     router.get('/error', function(req, res, next) {
-        debug('login error');
+        debug('login error: %O', req.params);
+        debug('login session: %O', req.session);
         res.render('loginerror');
     });
     return router;
