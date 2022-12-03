@@ -7,7 +7,9 @@
     "startdev": "nodemon ./bin/www"
   },
   "nodemonConfig": {
-    "ignore": ["./sessions"]
+    "ignore": [
+      "./sessions"
+    ]
   },
   "dependencies": {
     "@oauth-everything/passport-discord": "^1.0.2",
