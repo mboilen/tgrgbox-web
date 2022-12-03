@@ -31,6 +31,7 @@ module.exports = function(config) {
             } else {
                 response.allowed = false;
                 response.reason = 'Stream key ' + streamKey + 'was not found in config';
+                console.log('incoming stream rejected: ' + response.reason);
             }
 
         } else {
@@ -48,6 +49,7 @@ module.exports = function(config) {
             } else {
                 response.allowed = false;
                 response.reason = 'Stream key for playback didn\'t match';
+                console.log('outgoing stream rejected: ' + response.reason);
             }
         }
         debug('API Response: %O', response);

@@ -69,6 +69,7 @@ module.exports = function(app, sessionmgmt, config) {
             res.redirect('/login/error');
         }
         if (!config.users.has(req.user.userid)) {
+            console.log('Unauthorized user ' + req.user.userid);
             //This user has a discord account but isn't authorized for the service.
             var user = req.user.userid;
             req.session.destroy();
