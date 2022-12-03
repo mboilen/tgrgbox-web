@@ -20,6 +20,10 @@ urls:
     protocol: "hls"
     url: "https://tgrgbox.example.com:3333"
     file: "llhls.m3u8"
+#These are the ingest endpoints
+ingest:
+  srt: "srt://tgrgbox-dev.mgb.monster:9999"
+  rtmp: "rtmp://tgrgbox-dev.mgb.monster:1935"
 #A list of Discord usernames (with discriminators) that are allowed access to the site.  All streamers (listed in channels) must be listed here to
 users:
   - "TinkyWinky#0001"
