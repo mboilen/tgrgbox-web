@@ -33,7 +33,7 @@ module.exports = function(config) {
 
         var data = { 'renderData' : {
             'userid': session.userid,
-            'username': session.username,
+            'username': session.user,
             'photoUrl': session.photoUrl,
             'siteName': config.siteName,
             'defaultChannelTitle': sources.get(config.channels[0].name).title,
