@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
+var FileStore = require('session-file-store')(session);
 
 //load the config file(s)
 var serverConfig = require('config');
@@ -38,7 +39,8 @@ var sess = {
     secret: config.cookieSecret,
     resave: false,
     saveUninitialized: true,
-    cookie: {}
+    cookie: {},
+    store: new FileStore({})
 };
 //use secure cookies in production but not for dev
 if (config.isProduction) {
