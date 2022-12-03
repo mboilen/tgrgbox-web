@@ -9,6 +9,15 @@ module.exports = function(config) {
         module.isProduction = !config.get('development');
     else
         module.isProduction = true;
+    //Load the discord oauth info
+    module.discord = config.get('discord');
+    if (!module.discord.clientId)
+        throw 'Missing discord clientId';
+    if (!module.discord.clientSecret)
+        throw 'Missing discord clientSecret';
+    if (!module.discord.callbackUrl)
+        throw 'Missing discord callbackUrl';
+
     //Load the users into a set
     var usersArray = config.get('users');
     module.users = new Set(usersArray);

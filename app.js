@@ -12,7 +12,6 @@ var config = require('./utils/config')(serverConfig);
 
 var sessionmgmt = require('./utils/sessionmgmt');
 var indexRouter = require('./routes/index');
-var loginRouter = require('./routes/login');
 var logoutRouter = require('./routes/logout');
 var playerRouter = require('./routes/player')(config);
 var streamkeysRouter = require('./routes/streamkeys')(config);
@@ -49,6 +48,8 @@ if (config.isProduction) {
     sess.cookie.secure = true;
 }
 app.use(session(sess));
+//this needs the session to be set up already
+var loginRouter = require('./routes/login')(app, sessionmgmt, config);
 
 app.get('/', sessionmgmt.isAuthenticated, indexRouter);
 app.use('/player', sessionmgmt.isAuthenticated, playerRouter);
