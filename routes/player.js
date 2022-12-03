@@ -10,6 +10,7 @@ module.exports = function(config) {
     /* GET player. */
     router.get('/', function(req, res, next) {
         debug("Session data in router is %O", req.session);
+        debug("Session id in router is %O", req.session.id);
         var data = renderData(req.session);
         debug('player.js data is %O', data);
         res.render('player', data);

@@ -7,11 +7,15 @@ module.exports = function(config) {
     function makeStreamUrl(url, app, stream, file) {
         //debug('makeStreamUrl(%O, %O, %O, %O)', url, app, stream, file);
         var path = file ? nodePath.join(app, stream, file) : nodePath.join(app, stream);
-        //debug('makeStreamURL returning %O', new URL(path, url).href);
-        return new URL(path, url).href;
+        var streamUrl = new URL(path, url);
+        //add the stream key
+        streamUrl.searchParams.append('streamSecret', config.streamSecret);
+        //debug('makeStreamURL returning %O', streamUrl);
+        return streamUrl.href;
     }
 
     function buildDataForStream(session, streamName = config.channels[0].name) {
+        debug('session in buildDataForStream is %O', session);
         //make a map of sources from the config
         var sources = new Map(config.channels.map( (channel) => {
             var sources = Array.from(config.urls.values()).map( (url) => ({ 'label': url.name,

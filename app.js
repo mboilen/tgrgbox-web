@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
+var debug = require('debug')('tgrgbox:app');
 
 //load the config file(s)
 var serverConfig = require('config');
@@ -16,6 +17,7 @@ var indexRouter = require('./routes/index');
 var logoutRouter = require('./routes/logout');
 var playerRouter = require('./routes/player')(config);
 var streamkeysRouter = require('./routes/streamkeys')(config);
+var omeapi = require('./routes/omeapi')(config);
 
 var app = express();
 
@@ -65,6 +67,7 @@ app.use('/player', sessionmgmt.isAuthenticated, playerRouter);
 app.use('/login', loginRouter);
 app.use('/logout', logoutRouter);
 app.use('/streamkeys', sessionmgmt.isAuthenticated, streamkeysRouter);
+app.use('/api/ome', omeapi);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -79,6 +82,7 @@ app.use(function(err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500);
+    debug('Error: %O', res.locals);
     res.render('error');
 });
 
