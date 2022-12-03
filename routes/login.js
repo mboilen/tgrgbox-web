@@ -50,7 +50,7 @@ module.exports = function(app, sessionmgmt, config) {
         }
     },
     );
-    router.get('/_oauth', passport.authenticate('discord', {failureRedirect: '/error'}),
+    router.get('/_oauth', passport.authenticate('discord', {failureRedirect: '/login/error'}),
         function(req, res) {
             debug('redirecting to /info');
             res.redirect('/login/info');
@@ -79,7 +79,7 @@ module.exports = function(app, sessionmgmt, config) {
     router.get('/info', function(req, res, next) {
         if (!req.isAuthenticated()) {
             debug('unauthenticated user in /info');
-            res.redirect('/error');
+            res.redirect('/login/error');
         }
         debug('got auth %O', req.user);
         debug('got auth %O', req.session);
@@ -105,7 +105,7 @@ module.exports = function(app, sessionmgmt, config) {
     });
     router.get('/error', function(req, res, next) {
         debug('login error');
-        next();
+        res.render('loginerror');
     });
     return router;
 }
