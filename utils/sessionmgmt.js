@@ -14,8 +14,8 @@ function isAuthenticated(req, res, next) {
 function createUser(profile) {
     return {
         //in Discord the username does not have the discriminator.
-        user: profile.displayName,
-        userid: profile.username,
+        user: profile.username,
+        userid: profile.displayName,
         photoUrl: profile.photos.find( (photo) => photo.primary)?.value
     };
 }

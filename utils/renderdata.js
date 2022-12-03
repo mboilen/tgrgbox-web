@@ -11,7 +11,7 @@ module.exports = function(config) {
         return new URL(path, url).href;
     }
 
-    function buildDataForStream(username, streamName = config.channels[0].name) {
+    function buildDataForStream(session, streamName = config.channels[0].name) {
         //make a map of sources from the config
         var sources = new Map(config.channels.map( (channel) => {
             var sources = Array.from(config.urls.values()).map( (url) => ({ 'label': url.name,
@@ -32,7 +32,9 @@ module.exports = function(config) {
         }
 
         var data = { 'renderData' : {
-            'username': username,
+            'userid': session.userid,
+            'username': session.username,
+            'photoUrl': session.photoUrl,
             'siteName': config.siteName,
             'defaultChannelTitle': sources.get(config.channels[0].name).title,
             'source': source,

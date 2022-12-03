@@ -11,7 +11,7 @@
     <div class="p-3 m-3">
     <h1><center>Stream keys for <%= renderData.siteName %></center></h1>
     </div>
-    <% var userChannels = renderData.streamers.get(renderData.username);
+    <% var userChannels = renderData.streamers.get(renderData.userid);
        if (userChannels) { 
          var userChannelsSet = new Set(userChannels);%>
          <table class="table table-striped table-hover table-bordered">

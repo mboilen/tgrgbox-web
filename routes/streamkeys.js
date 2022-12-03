@@ -7,7 +7,7 @@ module.exports = function(config) {
     debug('Player cconfig is %O', config);
 
     router.get('/', function(req, res, next) {
-        var data = renderData(req.session.user);
+        var data = renderData(req.session);
         debug('render data is %O', data);
         res.render('streamkeys', data);
     });

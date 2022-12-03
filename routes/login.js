@@ -22,13 +22,7 @@ module.exports = function(app, sessionmgmt, config) {
             debug("cb refreshToken: %O", refreshToken);
             debug("cb cb: %O", cb);
             if (profile && profile.displayName) {
-                if (config.users.has(profile.displayName)) {
-                    debug('found user: %O', profile.username);
-                    cb(null, profile);
-                } else {
-                    debug('unauthorized user: %O', profile.displayName);
-                    cb(null, profile);
-                }
+                cb(null, profile);
             } else {
                 cb('No profile found');
             }
@@ -74,9 +68,9 @@ module.exports = function(app, sessionmgmt, config) {
             req.session.destroy();
             res.redirect('/login/error');
         }
-        if (!config.users.has(req.user.user)) {
+        if (!config.users.has(req.user.userid)) {
             //This user has a discord account but isn't authorized for the service.
-            var user = req.user.user;
+            var user = req.user.userid;
             req.session.destroy();
             res.render('unauthorized', {'username': user});
             return;

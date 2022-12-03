@@ -9,13 +9,14 @@ module.exports = function(config) {
 
     /* GET player. */
     router.get('/', function(req, res, next) {
-        var data = renderData(req.session.user);
+        debug("Session data in router is %O", req.session);
+        var data = renderData(req.session);
         debug('player.js data is %O', data);
         res.render('player', data);
     });
     router.get('/:stream', function(req, res, next) {
         debug("Got stream name %O", req.params);
-        var data = renderData(req.session.user, req.params.stream);
+        var data = renderData(req.session, req.params.stream);
         if (!data) {
             res.status(404).send("Cannot find stream " + req.params.stream);
             return;
