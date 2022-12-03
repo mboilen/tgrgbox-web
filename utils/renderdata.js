@@ -14,6 +14,24 @@ module.exports = function(config) {
         return streamUrl.href;
     }
 
+    function makeRtmpUrl(url, app, streamkey) {
+        return new URL(app, url).href;
+    }
+
+    function makeSrtUrl(url, app, streamkey) {
+        //SRT urls are crazy:
+        //
+        //srt://host:port?streamid=[srt://host:port/app/stream]
+        //
+        //the part in the brackets is url encoded (with percents)
+
+        var path = nodePath.join(app, streamkey);
+        var streamid = new URL(path, url).href;
+        var srtUrl = new URL(url);
+        srtUrl.searchParams.append('streamid', encodeURI(streamid));
+        return srtUrl.href;
+    }
+
     function buildDataForStream(session, streamName = config.channels[0].name) {
         debug('session in buildDataForStream is %O', session);
         //make a map of sources from the config
@@ -42,7 +60,13 @@ module.exports = function(config) {
             'siteName': config.siteName,
             'defaultChannelTitle': sources.get(config.channels[0].name).title,
             'source': source,
-            'channels' : config.channels.map( (channel) => ({'name': channel.name, 'title': channel.title, 'streamKey': channel.streamKey}) ),
+            'channels' : config.channels.map( (channel) => ({
+                'name': channel.name,
+                'title': channel.title,
+                'streamKey': channel.streamKey,
+                'rtmp' : makeRtmpUrl(config.ingest.rtmp, channel.app, channel.streamKey),
+                'srt' : makeSrtUrl(config.ingest.srt, channel.app, channel.streamKey)
+            })),
             'streamers' : config.streamers,
         } };
         debug('player.js data is %O', data);

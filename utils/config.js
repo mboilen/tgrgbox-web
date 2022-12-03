@@ -25,8 +25,11 @@ module.exports = function(config) {
     var usersArray = config.get('users');
     module.users = new Set(usersArray);
 
-    //map of url keys to (protocol,url,file) tuples (file is optional
+    //map of url keys to (protocol,url,file) tuples (file is optional)
     module.urls = new Map(Object.entries(config.get('urls')).map( ([key, value]) => [key, { 'name': key, 'protocol': value.protocol, 'url': value.url, 'file': value.file} ]));
+
+    //this remains an object
+    module.ingest = config.get('ingest');
 
     var channelsObject = config.get('channels');
     //Load the channels into a list from channel name to its details.  Preserve
