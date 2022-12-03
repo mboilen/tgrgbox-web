@@ -35,12 +35,19 @@ app.use('/public/hls.js', express.static(path.join(__dirname, 'node_modules', 'h
 //and bootstrap
 app.use('/public/bootstrap', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
 
+var fileStoreConfig = {
+    'ttl' : 60 * 60 * 24, //sessions live for 24 hours
+};
+//If production, should we encrypt the sessions?
+var fileStore = new FileStore({
+    fileStoreConfig
+});
 var sess = {
     secret: config.cookieSecret,
     resave: false,
     saveUninitialized: true,
     cookie: {},
-    store: new FileStore({})
+    store: fileStore
 };
 //use secure cookies in production but not for dev
 if (config.isProduction) {
