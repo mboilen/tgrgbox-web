@@ -1,0 +1,2 @@
+#This contains variables you want overridden in production mode
+development: false
