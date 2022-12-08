@@ -59,6 +59,7 @@ module.exports = function(app, sessionmgmt, config) {
     router.get('/_oauth', passport.authenticate('discord', { failureRedirect: '/login/error', failureMessage: true}),
         function(req, res) {
             debug('_oauth headers %O', req.headers);
+            debug('session secure %O', req.secure);
             req.session.regenerate(function (err) {
                 debug('in regenerate');
                 if (err) next(err);
