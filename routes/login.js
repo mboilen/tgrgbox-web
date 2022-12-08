@@ -58,43 +58,68 @@ module.exports = function(app, sessionmgmt, config) {
     );
     router.get('/_oauth', passport.authenticate('discord', { failureRedirect: '/login/error', failureMessage: true}),
         function(req, res) {
-            res.redirect('/login/info');
+            debug('_oauth headers %O', req.headers);
+            req.session.regenerate(function (err) {
+                debug('in regenerate');
+                if (err) next(err);
+                debug('Session when saving is %O', req.user);
+                debug('Setting session');
+                sessionmgmt.copyUserToSession(req.session, req.user);
+                debug('saving');
+                req.session.save(function (err) {
+                    debug('in save');
+                    if (err) return next(err);
+                    debug('redirecting, param is ' + req.query.redirect);
+                    if (req.query.redirect) {
+                        res.redirect(req.query.redirect);
+                    } else {
+                        res.redirect('/');
+                    }
+                });
+                debug('save over');
+            });
+            //debug('redirecting %O', req.user);
+            //res.redirect('/login/info');
         }
     );
 
     router.get('/info', function(req, res, next) {
         if (!req.isAuthenticated()) {
             debug('unauthenticated user in /info');
+            debug('user is %O', req.user);
             req.session.destroy();
+            res.clearCookie('connect.sid');
             res.redirect('/login/error');
-        }
-        if (!config.users.has(req.user.userid)) {
-            console.log('Unauthorized user ' + req.user.userid);
-            //This user has a discord account but isn't authorized for the service.
-            var user = req.user.userid;
-            req.session.destroy();
-            res.render('unauthorized', {'username': user});
-            return;
-        }
-        req.session.regenerate(function (err) {
-            debug('in regenerate');
-            if (err) next(err);
-            debug('Session when saving is %O', req.user);
-            debug('Setting session');
-            sessionmgmt.copyUserToSession(req.session, req.user);
-            debug('saving');
-            req.session.save(function (err) {
-                debug('in save');
-                if (err) return next(err);
-                debug('redirecting, param is ' + req.query.redirect);
-                if (req.query.redirect) {
-                    res.redirect(req.query.redirect);
-                } else {
-                    res.redirect('/');
-                }
+        } else {
+            if (!config.users.has(req.user.userid)) {
+                console.log('Unauthorized user ' + req.user.userid);
+                //This user has a discord account but isn't authorized for the service.
+                var user = req.user.userid;
+                req.session.destroy();
+                res.clearCookie('connect.sid');
+                res.render('unauthorized', {'username': user});
+                return;
+            }
+            req.session.regenerate(function (err) {
+                debug('in regenerate');
+                if (err) next(err);
+                debug('Session when saving is %O', req.user);
+                debug('Setting session');
+                sessionmgmt.copyUserToSession(req.session, req.user);
+                debug('saving');
+                req.session.save(function (err) {
+                    debug('in save');
+                    if (err) return next(err);
+                    debug('redirecting, param is ' + req.query.redirect);
+                    if (req.query.redirect) {
+                        res.redirect(req.query.redirect);
+                    } else {
+                        res.redirect('/');
+                    }
+                });
+                debug('save over');
             });
-            debug('save over');
-        });
+        }
     });
     router.get('/error', function(req, res, next) {
         debug('login error: %O', req.params);
