@@ -60,6 +60,7 @@ module.exports = function(app, sessionmgmt, config) {
         function(req, res) {
             debug('_oauth headers %O', req.headers);
             debug('session secure %O', req.secure);
+            /*
             req.session.regenerate(function (err) {
                 debug('in regenerate');
                 if (err) next(err);
@@ -79,8 +80,9 @@ module.exports = function(app, sessionmgmt, config) {
                 });
                 debug('save over');
             });
-            //debug('redirecting %O', req.user);
-            //res.redirect('/login/info');
+            */
+            debug('redirecting %O', req.user);
+            res.redirect('/login/info');
         }
     );
 
