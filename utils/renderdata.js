@@ -7,6 +7,11 @@ module.exports = function(config) {
     function makeStreamUrl(url, app, stream, file) {
         //debug('makeStreamUrl(%O, %O, %O, %O)', url, app, stream, file);
         var path = file ? nodePath.join(app, stream, file) : nodePath.join(app, stream);
+        //there may be a path at the end of url, so extract that and add it to the path
+        var urlPath = new URL(url);
+        if (urlPath.pathname) {
+            path = nodePath.join(urlPath.pathname, path);
+        }
         var streamUrl = new URL(path, url);
         //add the stream key
         streamUrl.searchParams.append('streamSecret', config.streamSecret);
