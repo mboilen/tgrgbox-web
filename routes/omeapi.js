@@ -18,7 +18,7 @@ module.exports = function(config) {
         hmac.update(req.body);
         //this replace crap is honestly how OME does it (it replaces the characters and ditches the padding)
         //https://github.com/AirenSoft/OvenMediaEngine/blob/master/src/projects/base/ovcrypto/base_64.cpp
-        var bodyDigest = hmac.digest('base64').replace('+', '-').replace('/', '_').replace(/=*$/, '');
+        var bodyDigest = hmac.digest('base64').replaceAll('+', '-').replaceAll('/', '_').replaceAll(/=*$/, '');
         debug('body Digest is %O', bodyDigest);
         var response = {};
         var headerDigest = req.headers['x-ome-signature'];
