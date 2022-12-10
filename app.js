@@ -10,7 +10,7 @@ var debug = require('debug')('tgrgbox:app');
 //load the config file(s)
 var serverConfig = require('config');
 
-var config = require('./utils/config')(serverConfig);
+var config = require('./utils/config')(serverConfig, path.join(__dirname, "data"));
 
 var sessionmgmt = require('./utils/sessionmgmt');
 var indexRouter = require('./routes/index');

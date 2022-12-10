@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@oauth-everything/passport-discord": "^1.0.2",
+    "base62-ts": "^1.2.11",
     "bootstrap": "^5.2.3",
     "config": "^3.3.8",
     "cookie-parser": "^1.4.6",
@@ -23,6 +24,7 @@
     "hls.js": "^1.2.8",
     "http-errors": "^2.0.0",
     "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21",
     "morgan": "^1.10.0",
     "ovenplayer": "^0.10.23",
     "passport": "^0.6.0",

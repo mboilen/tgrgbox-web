@@ -1,15 +1,51 @@
 const debug = require('debug')('tgrgbox:config');
 const crypto = require('node:crypto');
+const fs = require('fs');
+const path = require('path');
+const _ = require('lodash');
+const base62 = require('base62-ts');
+function makeSecret(size) {
+    var ints = [];
+    for (var i = 0; i < size; ++i) {
+        ints.push(crypto.randomInt(281474976710655));
+    }
+    var secret = ints.map( (i) => base62.encode(i) ).join("");
+    return secret;
+}
+function getOrCreateSecret(data, key, size) {
+    if (data.hasOwnProperty(key)) {
+        return data[key];
+    }
+    var secret = makeSecret(size);
+    data[key] = secret;
+    return secret;
+}
 //Takes the object loaded by node-config as an argument
-module.exports = function(config) {
+module.exports = function(config, datapath) {
+    const SHORT_SECRET_SIZE = 2;
+    const LONG_SECRET_SIZE = 6;
+    //load the data file from disk if it exists.
+    var DATA_NAME = path.join(datapath, 'data.json');
+    var savedData;
+    try {
+        savedData = JSON.parse(fs.readFileSync(DATA_NAME, 'utf8'));
+    } catch (err) {
+        console.error('error reading ' + DATA_NAME + ' ' + err);
+        savedData = {};
+    }
+    debug('loaded saved data: %O', savedData);
+
+    //copy the object so we can see if we've updated it at all.
+    var currentData = Object.assign({}, savedData);
+
     var module = {};
     module.port = config.get('port');
-    module.cookieSecret = config.get('cookieSecret');
+    module.cookieSecret = getOrCreateSecret(currentData, 'cookieSecret', SHORT_SECRET_SIZE);
     module.siteName = config.get('siteName');
     //This is a random string that is inserted into streaming urls.  It's only valid for the lifetime of the server (for now)
-    module.streamSecret = crypto.randomUUID( {disableEntropyCache: true} );
+    module.streamSecret = getOrCreateSecret(currentData, 'streamSecret', SHORT_SECRET_SIZE);
     if (config.has('development'))
-        module.isProduction = !config.get('development');
+        module.isProduction1 = !config.get('development');
     else
         module.isProduction = true;
     //Load the discord oauth info
@@ -34,7 +70,7 @@ module.exports = function(config) {
     var channelsObject = config.get('channels');
     //Load the channels into a list from channel name to its details.  Preserve
     //the list order from the config so we know which one is "primary"
-    var channelsList = Object.entries(channelsObject).map( ([key, value]) => ({ 'name': key, 'title': value.title, 'app': value.app, 'stream': value.stream, 'streamKey': value.key }));
+    var channelsList = Object.entries(channelsObject).map( ([key, value]) => ({ 'name': key, 'title': value.title, 'app': value.app, 'stream': value.stream, 'streamKey': getOrCreateSecret(currentData, 'stream.' + key, LONG_SECRET_SIZE) }));
 
     //make sure that the stream keys are unique
     var streamKeys = new Set();
@@ -63,5 +99,11 @@ module.exports = function(config) {
     //debug("streamer map:\n%O", streamerMap);
 
     debug("final config object:\n%O", module);
+    //save the secrets object if it was modified
+    if (!_.isEqual(savedData, currentData)) {
+        debug('current data is %O', currentData);
+        fs.writeFileSync(DATA_NAME, JSON.stringify(currentData, null, "  "));
+    }
+
     return module;
 }
