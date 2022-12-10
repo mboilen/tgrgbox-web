@@ -40,6 +40,7 @@ module.exports = function(config, datapath) {
 
     var module = {};
     module.port = config.get('port');
+    module.apiKey = config.get('apiKey');
     module.cookieSecret = getOrCreateSecret(currentData, 'cookieSecret', SHORT_SECRET_SIZE);
     module.siteName = config.get('siteName');
     //This is a random string that is inserted into streaming urls.  It's only valid for the lifetime of the server (for now)

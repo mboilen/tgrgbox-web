@@ -1,0 +1,4 @@
+apiKey: TGRGBOX_API_KEY
+discord:
+  clientId: TGRGBOX_DISCORD_CLIENT_ID
+  clientSecret: TGRGBOX_DISCORD_CLIENT_SECRET 
