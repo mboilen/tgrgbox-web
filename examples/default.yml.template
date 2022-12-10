@@ -25,8 +25,8 @@ urls:
     file: "llhls.m3u8"
 #These are the ingest endpoints
 ingest:
-  srt: "srt://tgrgbox-dev.mgb.monster:9999"
-  rtmp: "rtmp://tgrgbox-dev.mgb.monster:1935"
+  srt: "srt://tgrgbox-dev.example.com:9999"
+  rtmp: "rtmp://tgrgbox-dev.example.com:1935"
 #A list of Discord usernames (with discriminators) that are allowed access to the site.  All streamers (listed in channels) must be listed here to
 users:
   - "TinkyWinky#0001"
@@ -42,8 +42,6 @@ channels:
     app: "tgrgbace"
     #This is the "stream key" (in OME parlance) that will be used in playback
     stream: "main"
-    #The streamer key used to stream to this stream.  This must be unique across all streams and is used by the streamer to stream to this channel
-    key: "12345678"
     #The users allowed to see the stream key (i.e. use the stream)
     users:
       - "TinkyWinky#0001"
@@ -52,13 +50,11 @@ channels:
     title: Tinky Winky's stream"
     app: "tgrgbace"
     stream: "tinkystream"
-    key: "abcdef"
     users:
     - "TinkyWinky#0001"
-  dispey:
+  dipsey:
     title: "The Dipsy Zone"
     app: "tgrgbace"
-    stream: "dispsy"
-    key: "cat"
+    stream: "dipssy"
     users:
       - "Dipsy#0069"
