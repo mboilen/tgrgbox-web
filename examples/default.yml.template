@@ -1,12 +1,15 @@
 port: 8080
-#This secret is stored in session cookies.  It should be a long random string.
-cookieSecret: "keyboard cat"
 #Set to true to enable development mode.  This can be overridden in production.yml
 development: false
 #The name for your site (used in branding)
 siteName: Tgrgbox
+#This is the API key that OvenMediaEngine can use to communicate with this service.  This is also read from
+#TGRGBOX_API_KEY if you want to keep secrets out of this file.
+apiKey: abcd
 #Discord oauth2 configuration (see https://discord.com/developers/docs/topics/oauth2)
 discord:
+  #These are also read from TGRGBOX_DISCORD_CLIENT_ID and TGRGBOX_DISCORD_CLIENT_SECRET so this file can be 
+  #free of secrets
   clientId: "clientid"
   clientSecret: "clientsecret"
   #this is the internet facing callback url.  The api endpoint internally is /login/_oauth.  If you're behind a reverse proxy, than this may change
